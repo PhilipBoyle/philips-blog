@@ -4,7 +4,7 @@ from django.utils import timezone
 
 
 class Post(models.Model):
-    """this is a class for blog posts"""
+    """this is a model for blog posts"""
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     text = models.TextField()
