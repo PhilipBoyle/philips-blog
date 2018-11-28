@@ -1,0 +1,1 @@
+web: gunicorn philipsblog.wsgi --log-file -
