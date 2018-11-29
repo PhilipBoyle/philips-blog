@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Post, Comment
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm, SignUpForm
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import login, authenticate
 
 
 def post_list(request):
@@ -33,7 +35,7 @@ def post_new(request):
     return render(request, 'blog/post_edit.html', {'form': form})
 
 
-@login_required
+@staff_member_required
 def post_edit(request, pk):
     """ edit post """
     post = get_object_or_404(Post, pk=pk)
@@ -65,7 +67,7 @@ def post_publish(request, pk):
     return redirect('post_detail', pk=pk)
 
 
-@login_required
+@staff_member_required
 def post_remove(request, pk):
     """ remove a post """
     post = get_object_or_404(Post, pk=pk)
@@ -88,15 +90,33 @@ def add_comment_to_post(request, pk):
     return render(request, 'blog/add_comment_to_post.html', {'form': form})
 
 
-@login_required
+@staff_member_required
 def comment_approve(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
     return redirect('post_detail', pk=comment.post.pk)
 
 
-@login_required
+@staff_member_required
 def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return redirect('post_detail', pk=comment.post.pk)
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user.refresh_from_db()  # load the profile instance created by the signal
+            user.profile.birth_date = form.cleaned_data.get('birth_date')
+            user.save()
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
+            return redirect('post_list')
+    else:
+        form = SignUpForm()
+    return render(request, 'registration/signup.html', {'form': form})
+

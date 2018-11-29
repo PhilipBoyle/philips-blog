@@ -17,12 +17,28 @@
     <div class="page-header">
         {% if user.is_authenticated %}
         <!-- check for login -->
-            <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
-            <a href="{% url 'post_draft_list' %}" class="top-menu"><span class="glyphicon glyphicon-edit"></span></a>
-            <p class="top-menu">Hello, {{ user.username }}! <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
+            <div class="top-menu">
+                <button class="btn btn-success btn-sm">
+                    <a href="{% url 'post_new' %}" class="top-menu">Post <span class="glyphicon glyphicon-plus"></span></a>
+                </button>
+                <button class="btn btn-info btn-sm">
+                    <a href="{% url 'post_draft_list' %}" class="top-menu">Drafts <span class="glyphicon glyphicon-edit"></span></a>
+                </button>
+                <button class="btn btn-warning btn-sm">
+                    <a href="{% url 'logout' %}" class="top-menu">Logout <span class="glyphicon glyphicon-log-out"></span></a>
+                </button>
+            </div>
+            <p class="top-menu">Hello, {{ user.username }}! </p>
         {% else %}
         <!-- if not logged add login button -->
-            <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
+        <div class="top-menu">
+            <button class="btn btn-info btn-sm">
+                <a href="{% url 'login' %}" class="top-menu">Log In <span class="glyphicon glyphicon-log-in"></span></a>
+            </button>
+            <button class="btn btn-success btn-sm">
+               <a href="{% url 'signup' %}" class="top-menu">Sign Up <span class="glyphicon glyphicon-lock"></span></a>
+            </button>
+        </div>
         {% endif %}
         <h1><a href="/">Philip's Blog</a></h1>
     </div>
