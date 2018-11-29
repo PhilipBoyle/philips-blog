@@ -137,6 +137,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Login redirect (take user to home if logged in successfully)
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 # db_from_env = dj_database_url.config(conn_max_age=500)
 # DATABASES['default'].update(db_from_env)
