@@ -35,7 +35,7 @@ def post_new(request):
     return render(request, 'blog/post_edit.html', {'form': form})
 
 
-@staff_member_required
+@login_required
 def post_edit(request, pk):
     """ edit post """
     post = get_object_or_404(Post, pk=pk)
@@ -67,7 +67,7 @@ def post_publish(request, pk):
     return redirect('post_detail', pk=pk)
 
 
-@staff_member_required
+@login_required
 def post_remove(request, pk):
     """ remove a post """
     post = get_object_or_404(Post, pk=pk)
@@ -90,7 +90,7 @@ def add_comment_to_post(request, pk):
     return render(request, 'blog/add_comment_to_post.html', {'form': form})
 
 
-@staff_member_required
+@login_required
 def comment_approve(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
